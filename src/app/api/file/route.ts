@@ -46,10 +46,7 @@ export async function POST(request: Request) {
   // process file here
 
   // Export success message
-  return new Response(
-    JSON.stringify({ message: "File received' }),
-    {
-      headers: { "Content-Type": "application/json" },
-    }
-  );
+  return new Response(JSON.stringify({ message: "File received" }), {
+    headers: { "Content-Type": "application/json" },
+  });
 }
