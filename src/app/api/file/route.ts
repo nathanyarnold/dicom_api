@@ -1,52 +1,84 @@
 import { Request } from "node-fetch";
+import fs from "fs";
+// import path from "path";
+// import { writeFile } from "fs/promises";
+// import exp from "constants";
 
-// TS definitions
-export type errorTypes = "contentType" | "file";
-export type errorMessages = {
-  [key in errorTypes]: {
-    status: number;
-    message: string;
-  };
-};
+// filePath
+const FILE_PATH = process.cwd() + "/public/assets/";
 
-// All Possible Error Messages
-export const errorMessages: errorMessages = {
-  contentType: {
-    status: 400,
-    message: "Invalid Content-Type",
-  },
-  file: {
-    status: 400,
-    message: "File is required",
+// Disable Next.js body parser (since formidable handles it)
+export const config = {
+  api: {
+    bodyParser: false,
   },
 };
 
-export function outputErrorResponse(errorType: errorTypes) {
-  const error = errorMessages[errorType];
-  return new Response(JSON.stringify({ error: error.message }), {
-    status: error.status,
+export function outputJSONResponse(
+  message: string,
+  status?: 400 | 500 | undefined
+) {
+  const responseStatus = status || 200;
+  return new Response(JSON.stringify({ message }), {
+    status: responseStatus,
     headers: { "Content-Type": "application/json" },
   });
 }
 
+// validate file is in DICOM format
+export async function isDicomFile(file: File) {
+  const buffer = Buffer.from(await file.arrayBuffer());
+  const dicomSignature = buffer.toString("hex", 128, 132);
+  return dicomSignature === "4449434d";
+}
+
+// write files to filesystem
+export async function saveFileLocally(file: File) {
+  const buffer = Buffer.from(await file.arrayBuffer());
+  const filename = file.name.replaceAll(" ", "_");
+  const filepath = FILE_PATH + filename;
+
+  try {
+    fs.writeFileSync(filepath, buffer);
+    return { success: true, message: "File saved" };
+  } catch (error) {
+    return { success: false, message: "Error saving file" };
+  }
+}
+
+// POST /api/file
 export async function POST(request: Request) {
-  // Error: a file needs to be send using "multipart/form-data", with the parameter name "file"
+  // Validate: a file needs to be send using "multipart/form-data"
   if (!request.headers.get("Content-Type")?.includes("multipart/form-data")) {
-    return outputErrorResponse("contentType");
+    return outputJSONResponse(
+      "Invalid Content-Type, must be multipart/form-data",
+      400
+    );
   }
 
   // get "file"
   const formData = await request.formData();
-  const file = formData.get("file");
+  const file = formData.get("file") as File;
 
+  // Validate: file is required
   if (!file || typeof file !== "object" || !file.name) {
-    return outputErrorResponse("file");
+    return outputJSONResponse("File is required", 400);
   }
 
-  // process file here
+  // Validate: file is in DICOM format
+  const validFormat = await isDicomFile(file);
+  if (!validFormat) {
+    return outputJSONResponse(
+      "Invalid file format, must be in DICOM format",
+      400
+    );
+  }
 
-  // Export success message
-  return new Response(JSON.stringify({ message: "File received" }), {
-    headers: { "Content-Type": "application/json" },
-  });
+  // save file to disk
+  const saveResult = await saveFileLocally(file);
+  if (saveResult.success) {
+    return outputJSONResponse("File received and saved");
+  } else {
+    return outputJSONResponse("System error saving file", 500);
+  }
 }
