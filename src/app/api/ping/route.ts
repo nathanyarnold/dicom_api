@@ -1,7 +1,6 @@
 import { Request } from "node-fetch";
+import { returnJSONResponse } from "../utils.api";
 
 export async function GET(request: Request) {
-  return new Response(JSON.stringify({ status: "ok" }), {
-    headers: { "Content-Type": "application/json" },
-  });
+  return returnJSONResponse({ status: "OK" });
 }
