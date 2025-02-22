@@ -9,6 +9,8 @@ import {
   saveFileLocally,
   TEST_FILENAME_DCM,
   TEST_FILENAME_PNG,
+  ReadLocalFileReturn,
+  validatePNGFileFormat,
 } from "@/app/api/file/utils.file";
 import * as dicomParser from "dicom-parser";
 
@@ -49,20 +51,26 @@ export async function POST(request: Request) {
   return returnJSONResponse({ message: "File created" });
 }
 
-/* // stub for now!
 // GET /api/file/png
 export async function GET(request: Request) {
   // Read the file from the filesystem
-  const fileResponse = await readLocalFile(TEST_FILENAME_PNG);
+  const fileResponse = (await readLocalFile(
+    TEST_FILENAME_PNG
+  )) as ReadLocalFileReturn;
 
   // Validate: file is present
   if (!fileResponse.success || !fileResponse.file) {
     return returnJSONResponse({ message: "No file is present" }, 400);
   }
+  const { file } = fileResponse;
+
+  // verify file is a PNG
+  console.log(validatePNGFileFormat(file));
+  if (!validatePNGFileFormat(file) as Boolean) {
+    return returnJSONResponse({ message: "File is not a PNG" }, 400);
+  }
 
   // output
-  //  return returnJSONResponse({ message: "File retrieved", file: null });
-  const { file } = fileResponse;
   return new Response(file, {
     status: 200,
     headers: {
@@ -72,4 +80,3 @@ export async function GET(request: Request) {
     },
   });
 }
-*/

@@ -13,9 +13,9 @@ export interface ExtractPngFromDicomFileReturn {
 }
 
 /**
- * Validates that the file is in DICOM format.
- * @param buffer - The DICOM file content as a Buffer.
- * @returns bolean TRUE || FALSE depending on whether the file is a DICOM file.
+ * Validates that the file is a valid DICOM file.
+ * @param file - The file content as a FILE
+ * @returns boolean indicating whether the file is a DICOM file.
  */
 export async function validateDicomFile(file: File) {
   const buffer = Buffer.from(await file.arrayBuffer());
@@ -29,18 +29,18 @@ function extractHeaderByTag(tag: string, dataSet: any) {
 
 /**
  * Extracts all DICOM header attributes from a DICOM file stored in a Buffer.
- * @param buffer - The DICOM file content as a Buffer.
+ * @param fileBuffer - The DICOM file content as a Buffer.
  * @returns An object containing all extracted DICOM tags.
  */
 export function extractAllDicomHeaders(
-  file: Buffer | undefined
+  fileBuffer: Buffer | undefined
 ): DicomHeadersValues {
   // validate file is sent
-  if (!file) return {};
+  if (!fileBuffer) return {};
 
   try {
     // Parse the DICOM file
-    const dataSet = dicomParser.parseDicom(file);
+    const dataSet = dicomParser.parseDicom(fileBuffer);
 
     // Extract all DICOM headers
     const tags: DicomHeadersValues = {};
@@ -57,20 +57,20 @@ export function extractAllDicomHeaders(
 
 /**
  * Extracts a single dicom header, using a supplied tag
- * @param tag
- * @param filePath
+ * @param tag - the tag desired, in String format
+ * @param fileBuffer - The DICOM file content as a Buffer.
  * @returns
  */
 export async function extractDicomHeaderByTag(
   tag: string,
-  file: Buffer | undefined
+  fileBuffer: Buffer | undefined
 ): Promise<DicomHeaderValue> {
   // validate file is sent
-  if (!file) return null;
+  if (!fileBuffer) return null;
 
   // Extract one header using the supplied tag
   try {
-    const dataSet = dicomParser.parseDicom(file);
+    const dataSet = dicomParser.parseDicom(fileBuffer);
     const element = dataSet.elements[tag];
     if (element) {
       return extractHeaderByTag(tag, dataSet);
