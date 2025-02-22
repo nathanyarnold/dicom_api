@@ -22,10 +22,12 @@
     "@types/pngjs": "^6.0.5",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@types/swagger-jsdoc": "^6.0.4",
     "eslint": "^9",
     "eslint-config-next": "15.1.7",
     "formidable": "^3.5.2",
     "node-fetch": "^3.3.2",
+    "swagger-jsdoc": "^6.2.8",
     "typescript": "^5"
   }
 }
