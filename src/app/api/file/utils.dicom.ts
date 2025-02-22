@@ -1,8 +1,8 @@
-import dicomParser, { parseDicom } from "dicom-parser";
+import dicomParser, { parseDicom, DataSet } from "dicom-parser";
 import { PNG } from "pngjs";
 
 // TypeScript
-export type DicomHeaderValue = string | number | null;
+export type DicomHeaderValue = string | number | undefined | null;
 export interface DicomHeadersValues {
   [tag: string]: DicomHeaderValue;
 }
@@ -23,7 +23,13 @@ export async function validateDicomFile(file: File) {
   return dicomSignature === "4449434d";
 }
 
-function extractHeaderByTag(tag: string, dataSet: any) {
+/**
+ * Extracts a single DICOM header attribute from a DICOM file stored in a Buffer.
+ * @param tag - The DICOM tag to extract as a STRING.
+ * @param dataSet - The parsed DICOM file as ANY.
+ * @returns boolean indicating whether the file is a DICOM file.
+ */
+function extractHeaderByTag(tag: string, dataSet: DataSet): DicomHeaderValue {
   return dataSet.string(tag) ?? dataSet.uint16(tag) ?? dataSet.uint32(tag);
 }
 
@@ -59,7 +65,9 @@ export function extractAllDicomHeaders(
  * Extracts a single dicom header, using a supplied tag
  * @param tag - the tag desired, in String format
  * @param fileBuffer - The DICOM file content as a Buffer.
- * @returns
+ * @returns An object containing the extracted DICOM tag.
+ * Note Undefined is returned if the tag exists, but has an undefined value.
+ * Note Null is returned if the tag does not exist.
  */
 export async function extractDicomHeaderByTag(
   tag: string,
