@@ -26,9 +26,9 @@
  */
 
 import { Request } from "node-fetch";
-import { returnJSONResponse } from "../../utils.api";
-import { readLocalFile, TEST_FILENAME_DCM } from "../utils.file";
-import { extractAllDicomHeaders } from "../utils.dicom";
+import { returnJSONResponse } from "@/app/api/v1/utils.api";
+import { readLocalFile, TEST_FILENAME_DCM } from "@/app/api/v1/file/utils.file";
+import { extractAllDicomHeaders } from "@/app/api/v1/file/utils.dicom";
 
 export async function GET(request: Request) {
   // Read the file from the filesystem

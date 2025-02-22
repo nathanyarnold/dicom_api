@@ -18,7 +18,7 @@
  */
 
 import { Request } from "node-fetch";
-import { returnJSONResponse } from "../utils.api";
+import { returnJSONResponse } from "@/app/api/v1/utils.api";
 
 export async function GET(request: Request) {
   return returnJSONResponse({ status: "OK" });

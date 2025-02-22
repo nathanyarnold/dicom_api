@@ -18,7 +18,7 @@
  */
 
 import { Request } from "node-fetch";
-import { returnJSONResponse } from "../../utils.api";
+import { returnJSONResponse } from "@/app/api/v1/utils.api";
 
 /**
  * This function is the default route for the file header endpoint. It handles cases where a file header is requested, but no tag is specified.

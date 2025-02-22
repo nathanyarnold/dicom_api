@@ -30,7 +30,7 @@
 import { Request } from "node-fetch";
 import { readFileSync } from "fs";
 import { join } from "path";
-import { returnJSONResponse } from "../utils.api";
+import { returnJSONResponse } from "@/app/api/v1/utils.api";
 
 export function getPackageJSONVsNumber() {
   return JSON.parse(

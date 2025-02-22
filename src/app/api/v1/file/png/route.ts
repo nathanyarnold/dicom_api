@@ -89,11 +89,11 @@
  */
 
 import { Request } from "node-fetch";
-import { returnJSONResponse } from "@/app/api/utils.api";
+import { returnJSONResponse } from "@/app/api/v1/utils.api";
 import {
   extractPngFromDicom,
   ExtractPngFromDicomFileReturn,
-} from "@/app/api/file/utils.dicom";
+} from "@/app/api/v1/file/utils.dicom";
 import {
   readLocalFile,
   saveFileLocally,
@@ -101,13 +101,14 @@ import {
   TEST_FILENAME_PNG,
   ReadLocalFileReturn,
   validatePNGFileFormat,
-} from "@/app/api/file/utils.file";
+} from "@/app/api/v1/file/utils.file";
 import * as dicomParser from "dicom-parser";
 
 // POST /api/file/png
 export async function POST(request: Request) {
   // Read the file from the filesystem
   const fileName = TEST_FILENAME_DCM;
+  const outputFileName = TEST_FILENAME_PNG;
   const fileResponse = await readLocalFile(fileName);
 
   // Validate: file is present
@@ -134,7 +135,7 @@ export async function POST(request: Request) {
   // Create PNG from DICOM and validate file was created
   const pngResponse = (await extractPngFromDicom(
     fileResponse.file,
-    TEST_FILENAME_PNG
+    outputFileName
   )) as ExtractPngFromDicomFileReturn;
 
   // Verify there was no error
@@ -149,13 +150,13 @@ export async function POST(request: Request) {
   }
 
   // save the file to the filesystem
-  const saveResult = await saveFileLocally(pngResponse.file, fileName);
+  const saveResult = await saveFileLocally(pngResponse.file, outputFileName);
 
   // output
   return returnJSONResponse({
     success: true,
     message: "File created",
-    fileName,
+    fileName: outputFileName,
   });
 }
 
