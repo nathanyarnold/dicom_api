@@ -1,6 +1,6 @@
 import { Request } from "node-fetch";
 import { returnJSONResponse } from "../utils.api";
-import { saveFileLocally } from "./utils.file";
+import { saveFileLocally, TEST_FILENAME_DCM } from "./utils.file";
 import { validateDicomFile } from "./utils.dicom";
 
 // POST /api/file
@@ -32,7 +32,7 @@ export async function POST(request: Request) {
   }
 
   // save file to disk
-  const saveResult = await saveFileLocally(file);
+  const saveResult = await saveFileLocally(file, TEST_FILENAME_DCM);
   if (saveResult.success) {
     return returnJSONResponse({
       message: "File received and saved",

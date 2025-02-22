@@ -1,9 +1,15 @@
 import dicomParser, { parseDicom } from "dicom-parser";
+import { PNG } from "pngjs";
 
-// TypeScript definitions
+// TypeScript
 export type DicomHeaderValue = string | number | null;
 export interface DicomHeadersValues {
   [tag: string]: DicomHeaderValue;
+}
+export interface ExtractPngFromDicomFileReturn {
+  success: boolean;
+  error?: Error;
+  file?: File;
 }
 
 /**
@@ -72,7 +78,84 @@ export async function extractDicomHeaderByTag(
       return null;
     }
   } catch (error) {
-    console.error("Error parsing DICOM file:", error);
     return null;
+  }
+}
+
+// Function to convert a PNG to a File
+async function convertPNGToFile(png: PNG, fileName: string): Promise<File> {
+  return new Promise((resolve, reject) => {
+    const chunks: Buffer[] = [];
+
+    png
+      .pack()
+      .on("data", (chunk) => chunks.push(chunk))
+      .on("end", () => {
+        const buffer = Buffer.concat(chunks);
+        const file = new File([buffer], fileName, { type: "image/png" });
+        resolve(file);
+      })
+      .on("error", reject);
+  });
+}
+
+export async function extractPngFromDicom(
+  fileBuffer: Buffer,
+  fileName: string
+): Promise<ExtractPngFromDicomFileReturn> {
+  try {
+    // Parse the DICOM file
+    const dataSet = dicomParser.parseDicom(fileBuffer);
+
+    // Extract necessary attributes
+    const rows = dataSet.uint16("x00280010"); // Number of rows (height)
+    const cols = dataSet.uint16("x00280011"); // Number of columns (width)
+    const pixelDataElement = dataSet.elements.x7fe00010; // Pixel data tag
+
+    if (!pixelDataElement) {
+      return {
+        success: false,
+        error: new Error("No pixel data found in the DICOM file."),
+      };
+    }
+
+    // Extract pixel data
+    const pixelData = new Uint16Array(
+      dataSet.byteArray.buffer,
+      pixelDataElement.dataOffset,
+      pixelDataElement.length / 2
+    );
+
+    // Find max pixel value manually (avoiding stack overflow)
+    let maxPixelValue = 0;
+    for (let i = 0; i < pixelData.length; i++) {
+      if (pixelData[i] > maxPixelValue) {
+        maxPixelValue = pixelData[i];
+      }
+    }
+
+    // Normalize and write to PNG
+    const png = new PNG({ width: cols, height: rows, bitDepth: 8 });
+
+    for (let i = 0; i < pixelData.length; i++) {
+      const normalizedValue =
+        maxPixelValue > 0
+          ? Math.floor((pixelData[i] / maxPixelValue) * 255)
+          : 0;
+      const idx = i * 4;
+      png.data[idx] = normalizedValue; // R
+      png.data[idx + 1] = normalizedValue; // G
+      png.data[idx + 2] = normalizedValue; // B
+      png.data[idx + 3] = 255; // Alpha (fully opaque)
+    }
+
+    // convert PNG into a Buffer
+    const pngBuffer = await convertPNGToFile(png, fileName);
+    return { success: true, file: pngBuffer };
+  } catch (error) {
+    return {
+      success: false,
+      error: new Error("Error extracting PNG from DICOM"),
+    };
   }
 }
