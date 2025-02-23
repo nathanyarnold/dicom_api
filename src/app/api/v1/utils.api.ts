@@ -5,7 +5,6 @@
  * @param status - The HTTP status code for the response. Can be 400, 500, or undefined. Defaults to 200 if not provided.
  * @returns A Response object with the JSON stringified output and appropriate headers.
  */
-
 export function returnJSONResponse(
   output: any = {},
   status?: 400 | 500 | undefined
