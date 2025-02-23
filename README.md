@@ -52,7 +52,7 @@ Fourth (optional), run the unit-test suite
 npm run test
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the Swagger Docs.
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the Swagger Docs and interact with the API.
 
 The API is running at:
 
