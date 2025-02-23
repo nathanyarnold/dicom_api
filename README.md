@@ -30,7 +30,7 @@ First, download the application:
 
 ```bash
 git clone https://github.com/nathanyarnold/dicom_api.git
-cd pockethealth
+cd dicom_api
 npm install
 ```
 
