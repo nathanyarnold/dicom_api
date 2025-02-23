@@ -29,7 +29,7 @@ To run the tests, install the app per the instructions belowm, and then run `npm
 First, download the application:
 
 ```bash
-git clone https://github.com/nathanyarnold/pockethealth.git
+git clone https://github.com/nathanyarnold/dicom_api.git
 cd pockethealth
 npm install
 ```
