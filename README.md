@@ -56,14 +56,14 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 The API is running at:
 
-- POST /api/v1/file (Upload a DICOM file)
-- GET /api/v1/file/headers (Retrieve all DICOM headers from a local file)
-- GET /api/v1/file/header/{tag} (Retrieve a DICOM header value)
-- POST /api/v1/file/png (Create a PNG file from a DICOM file)
-- GET /api/v1/file/png (Retrieve the PNG file)
+- POST `/api/v1/file` (Upload a DICOM file)
+- GET /`api/v1/file/headers` (Retrieve all DICOM headers from a local file)
+- GET `/api/v1/file/header/{tag}` (Retrieve a DICOM header value)
+- POST `/api/v1/file/png` (Create a PNG file from a DICOM file)
+- GET `/api/v1/file/png` (Retrieve the PNG file)
 
 Some additional Utils are available at:
 
-- GET /api/v1/openapi (Retrieve OpenAPI Specification)
-- GET /api/v1/health (Health check endpoint)
-- GET /api/v1/ping (Health check endpoint)
+- GET `/api/v1/openapi` (Retrieve OpenAPI Specification)
+- GET `/api/v1/health` (Health check endpoint)
+- GET `/api/v1/ping` (Health check endpoint)
