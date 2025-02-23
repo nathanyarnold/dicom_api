@@ -16,7 +16,7 @@ To help with development and integration testing, I used a Postman collection. F
 
 ## Unit Tests
 
-The test didn't explicitly ask for unit-test, but I do believe they are good practice. I didn't want to get bogged-down in writing a ton for a test like this thought. Instead, I added jest, and mocked up two tests: one for the util I use to output JSON responses, and the other for the simple PING GET endpoint. I did this to demonstrate _how_ I would do it for this application.
+The test instructions didn't explicitly ask for unit-test, but I do believe they are good practice. At the same time, I didn't want to get bogged-down in writing a ton for this exercise, in the interest of time. Instead, I added Jest (a JS-based test lib), and mocked up two simple tests: one for the util I use to output standardized JSON responses, and the other for the simple `/api/v1/ping` GET endpoint. I did this to demonstrate _how_ I would do it for this application.
 
 ## Running the Application: "Get Started"
 
