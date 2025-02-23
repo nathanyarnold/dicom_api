@@ -8,6 +8,8 @@ NextJS was used because I (Nathan) am a frontend developer by trade, and this is
 
 OpenAPI spec is available at [http://localhost:3000/api/v1/openapi.json](http://localhost:3000/api/v1/openapi.json) once the application is running (see below).
 
+Swagger is running at the [web-app root](http://localhost:3000), for your convenience.
+
 ## Postman Collection
 
 To help with development and integration testing, I used a Postman collection. For your convenience, it is available in `public/docs/PocketHealth API.postman_collection.json`
