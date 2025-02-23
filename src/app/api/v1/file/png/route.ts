@@ -19,15 +19,12 @@
  *             schema:
  *               type: object
  *               properties:
- *                 success:
- *                   type: boolean
- *                   example: true
  *                 message:
  *                   type: string
  *                   example: File created
  *                 fileName:
  *                   type: string
- *                   example: test.dcm
+ *                   example: IM000001.png
  *       400:
  *         description: Bad request, either no DICOM file is present, the file is not in DICOM format, the file could not be converted,
  *         content:
@@ -66,7 +63,7 @@
  *         required: true
  *         schema:
  *           type: string
- *         description: The name of the PNG file to be retrieved
+ *         description: The name of the PNG file to be retrieved. eg IM000001.png (the name generated in the above POST)
  *     responses:
  *       200:
  *         description: File retrieved successfully
