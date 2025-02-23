@@ -18,6 +18,8 @@ To help with development and integration testing, I used a Postman collection. F
 
 The test instructions didn't explicitly ask for unit-test, but I do believe they are good practice. At the same time, I didn't want to get bogged-down in writing a ton for this exercise, in the interest of time. Instead, I added Jest (a JS-based test lib), and mocked up two simple tests: one for the util I use to output standardized JSON responses, and the other for the simple `/api/v1/ping` GET endpoint. I did this to demonstrate _how_ I would do it for this application.
 
+To run the tests, install app per the instructions belowm,and then run `npm run test` in the command-line.
+
 ## Running the Application: "Get Started"
 
 First, download the application:
@@ -38,6 +40,12 @@ Third, run the development server:
 
 ```bash
 npm run dev
+```
+
+Fourth (optional), run the unit-test suite
+
+```bash
+npm run test
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.

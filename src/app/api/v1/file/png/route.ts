@@ -4,6 +4,13 @@
  *   post:
  *     summary: Create a PNG file from a DICOM file
  *     description: Reads a DICOM file from the filesystem, converts it to a PNG file, and saves it.
+ *     parameters:
+ *       - in: query
+ *         name: filename
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The name of the DICOM file to be converted to PNG
  *     responses:
  *       200:
  *         description: File created successfully
@@ -28,34 +35,38 @@
  *             schema:
  *               type: object
  *               properties:
- *                 success:
- *                   type: boolean
  *                 message:
  *                   type: string
  *                 fileName:
  *                   type: string
  *             examples:
+ *
  *               Example1:
+ *                 summary: Filename is required
+ *                 value:
+ *                   message: "Filename is required"
+ *               Example2:
  *                 summary: No file is present
  *                 value:
- *                   success: false
- *                   message: "No file is present"
- *                   fileName: "{fileName}"
- *               Example2:
+ *                   message: "No DICOM file is present at that filename"
+ *               Example3:
  *                 summary: File is not a DICOM
  *                 value:
- *                   success: false
  *                   message:  "File is not a DICOM"
- *                   fileName: "{fileName}"
- *               Example3:
+ *               Example4:
  *                 summary: Unknown error
  *                 value:
- *                   success: false
  *                   message: There was an unknown error extracting a PNG from the DICOM file
- *                   fileName: {fileName}
  *   get:
  *     summary: Retrieve the PNG file
  *     description: Reads a PNG file from the filesystem and returns it.
+ *     parameters:
+ *       - in: query
+ *         name: filename
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The name of the PNG file to be retrieved
  *     responses:
  *       200:
  *         description: File retrieved successfully
@@ -75,50 +86,54 @@
  *                   type: string
  *             examples:
  *               Example1:
+ *                 summary: Filename is required
+ *                 value:
+ *                   message: "Filename is required"
+ *               Example2:
  *                 summary: Requested file is not in PNG format
  *                 value:
- *                   success: false
  *                   message: "File is not a PNG"
- *                   fileName: "{fileName}"
- *               Example2:
+ *               Example3:
  *                 summary: Requested file is not present
  *                 value:
- *                   success: false
- *                   message:  "No file is present"
- *                   fileName: "{fileName}"
+ *                   message:  "No PNG file is present at that filename"
  */
 
 import { Request } from "node-fetch";
-import { returnJSONResponse } from "@/app/api/v1/utils.api";
+import { returnJSONResponse, getQueryParam } from "@/app/api/v1/utils.api";
 import {
   extractPngFromDicom,
   ExtractPngFromDicomFileReturn,
 } from "@/app/api/v1/file/utils.dicom";
 import {
   readLocalFile,
-  saveFileLocally,
-  TEST_FILENAME_DCM,
-  TEST_FILENAME_PNG,
+  changeToPngExtension,
   ReadLocalFileReturn,
   validatePNGFileFormat,
+  saveFileLocally,
 } from "@/app/api/v1/file/utils.file";
 import * as dicomParser from "dicom-parser";
 
 /**
- * POST request to the /api/v1/png endpoint.
+ * POST request to the /api/v1/file/png endpoint.
  * @param request - Request object.
  * @returns A JSON response indicating the success or failure of the PNG file creation process, including a message and the file name.
  */
 export async function POST(request: Request) {
+  // get the filename from the GET request object "filename"
+  const filename = getQueryParam(request, "filename");
+  if (!filename) {
+    return returnJSONResponse({ message: "Filename is required" }, 400);
+  }
+
   // Read the file from the filesystem
-  const fileName = TEST_FILENAME_DCM;
-  const outputFileName = TEST_FILENAME_PNG;
-  const fileResponse = await readLocalFile(fileName);
+  const outputFileName = changeToPngExtension(filename);
+  const fileResponse = await readLocalFile(filename);
 
   // Validate: file is present
   if (!fileResponse.success || !fileResponse.file) {
     return returnJSONResponse(
-      { success: false, message: "No file is present", fileName },
+      { message: "No DICOM file is present at that filename" },
       400
     );
   }
@@ -128,9 +143,7 @@ export async function POST(request: Request) {
   if (!dicomData.elements.x7fe00010) {
     return returnJSONResponse(
       {
-        success: false,
         message: "File is not a DICOM",
-        fileName,
       },
       400
     );
@@ -147,37 +160,44 @@ export async function POST(request: Request) {
     const errorMsg =
       pngResponse.error ||
       "There was an unknown error extracting a PNG from the DICOM file";
-    return returnJSONResponse(
-      { success: false, message: errorMsg, fileName },
-      400
-    );
+    return returnJSONResponse({ message: errorMsg, filename }, 400);
   }
 
   // save the file to the filesystem
-  const saveResult = await saveFileLocally(pngResponse.file, outputFileName);
+  const saveResult = await saveFileLocally(pngResponse.file);
 
   // output
   return returnJSONResponse({
-    success: true,
     message: "File created",
     fileName: outputFileName,
   });
 }
 
 /**
- * GET request to the /api/v1/png endpoint.
+ * GET request to the /api/v1/file/png endpoint.
  * @param request - Request object.
  * @returns a JSON response indicating the success or failure of the PNG file retrieval process, including a message and the file name.
  */
 export async function GET(request: Request) {
+  // get the filename from the GET request object "filename"
+  const url = new URL(request.url);
+  const param = url.searchParams.get("filename");
+  const filename = getQueryParam(request, "filename");
+
+  // validate filename is present
+  if (!filename) {
+    return returnJSONResponse({ message: "Filename is required" }, 400);
+  }
+
   // Read the file from the filesystem
-  const fileResponse = (await readLocalFile(
-    TEST_FILENAME_PNG
-  )) as ReadLocalFileReturn;
+  const fileResponse = (await readLocalFile(filename)) as ReadLocalFileReturn;
 
   // Validate: file is present
   if (!fileResponse.success || !fileResponse.file) {
-    return returnJSONResponse({ message: "No file is present" }, 400);
+    return returnJSONResponse(
+      { message: "No PNG file is present at that filename" },
+      400
+    );
   }
   const { file } = fileResponse;
 

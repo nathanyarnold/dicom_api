@@ -1,3 +1,4 @@
+import * as path from "path";
 import fs from "fs";
 
 // TypeSript
@@ -19,6 +20,36 @@ export const TEST_FILENAME_DCM = "test-file.dcm"; // for demo purposes only
 export const TEST_FILENAME_PNG = "test-file.png"; // for demo purposes only
 
 /**
+ * Sanitizes the file name by replacing spaces with underscores and only allowing alphanumeric characters, hyphens, underscores, and periods.
+ *
+ * @param fileName - The original file name.
+ * @returns The sanitized file name.
+ */
+export function sanitizeFileName(fileName: string | null): string {
+  // handle no filename
+  if (!fileName) return "";
+
+  // handle filename
+  const saferFileName = fileName
+    .replaceAll(" ", "_") // replaces spaces with underscores
+    .replace(/[^a-zA-Z0-9-_\.]/g, ""); // remove all unwanted characters
+  return saferFileName;
+}
+
+/**
+ * Takes a filename, with our without an extension, and returns that filename with a `.png` extension.
+ *
+ * @param filename - The original file name.
+ * @returns The file name with the `.png` extension.
+ */
+export function changeToPngExtension(filename: string): string {
+  // Get the base name without extension
+  const baseName = path.parse(filename).name;
+  // Return the new filename with `.png` extension
+  return `${baseName}.png`;
+}
+
+/**
  * Saves a file locally to the specified file path.
  *
  * @param file - The file to be saved, represented as a `File` object.
@@ -27,12 +58,11 @@ export const TEST_FILENAME_PNG = "test-file.png"; // for demo purposes only
  *  - `success`: A boolean indicating whether the file was saved successfully.
  *  - `fileName`: The name of the saved file, or `undefined` if the save failed.
  */
-export async function saveFileLocally(
-  file: File,
-  fileName: string
-): Promise<SaveFileLocallyReturn> {
+export async function saveFileLocally(file: File): Promise<Return> {
   const buffer = Buffer.from(await file.arrayBuffer());
-  const saferFileName = fileName.replaceAll(" ", "_");
+  const saferFileName = sanitizeFileName(file.name);
+
+  // craete path
   const filePath = FILE_PATH + saferFileName;
 
   try {

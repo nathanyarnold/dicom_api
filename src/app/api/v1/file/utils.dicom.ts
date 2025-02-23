@@ -13,6 +13,40 @@ export interface ExtractPngFromDicomFileReturn {
 }
 
 /**
+ * Sanitizes a DICOM tag by removing whitespace and normalizing the format.
+ * @param tag - The DICOM tag to sanitize as a STRING.
+ * @returns The sanitized DICOM tag as a STRING, or NULL if the input is invalid.
+ */
+export function sanitizeDicomTag(tag: string | null): string | null {
+  if (!tag) return null; // Handle null or undefined input
+  let newTag = tag;
+
+  // Trim whitespace
+  newTag = newTag.trim();
+
+  // Check if tag starts with "0x" (hex notation) and normalize
+  if (newTag.startsWith("0x")) {
+    newTag = newTag.slice(2); // Remove "0x" prefix
+  }
+
+  // for now, remove any prefix 'x' chars
+  if (newTag.startsWith("x")) {
+    newTag = newTag.slice(1); // Remove "0x" prefix
+  }
+
+  // Ensure the tag consists only of valid hexadecimal characters
+  if (!/^[0-9A-Fa-f]{8}$/.test(newTag)) {
+    return null; // Invalid tag format, return null
+  }
+
+  // capitalize the tag
+  newTag = newTag.toUpperCase();
+
+  // add the beginning 'x' to the tag, and return
+  return `x${newTag}`;
+}
+
+/**
  * Validates that the file is a valid DICOM file.
  * @param file - The file content as a FILE
  * @returns boolean indicating whether the file is a DICOM file.

@@ -30,7 +30,7 @@
  *                   example: File received and saved
  *                 fileName:
  *                   type: string
- *                   example: TEST_FILENAME_DCM
+ *                   example: IM000001
  *       400:
  *         description: Invalid request.
  *         content:
@@ -62,7 +62,7 @@
  *                   example: System error saving file
  */
 import { returnJSONResponse } from "../utils.api";
-import { saveFileLocally, TEST_FILENAME_DCM } from "./utils.file";
+import { saveFileLocally, sanitizeFileName } from "./utils.file";
 import { validateDicomFile } from "./utils.dicom";
 
 /**
@@ -98,7 +98,7 @@ export async function POST(request: Request) {
   }
 
   // save file to disk
-  const saveResult = await saveFileLocally(file, TEST_FILENAME_DCM);
+  const saveResult = await saveFileLocally(file);
   if (saveResult.success) {
     return returnJSONResponse({
       message: "File received and saved",
