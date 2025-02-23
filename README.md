@@ -8,6 +8,8 @@ NextJS was used because I (Nathan) am a frontend developer by trade, and this is
 
 The app takes supplied images, and saves them locally to the filesystem. Secure coding is limited to sanitized query params ("tag" and "filename") and filenames themselves. If this were scaled or used in production, the system would need to have some understanding of users and auth, as well as transporting, storing and retrieving files safely and securely.
 
+Uploaded DICOM and generated PNG images files are being stored in `public/assets/`.
+
 ## API Documentation
 
 OpenAPI spec is available at [http://localhost:3000/api/v1/openapi.json](http://localhost:3000/api/v1/openapi.json) once the application is running (see below).
