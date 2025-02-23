@@ -30,6 +30,12 @@ import { returnJSONResponse } from "@/app/api/v1/utils.api";
 import { readLocalFile, TEST_FILENAME_DCM } from "@/app/api/v1/file/utils.file";
 import { extractAllDicomHeaders } from "@/app/api/v1/file/utils.dicom";
 
+/**
+ * Handles the GET request to retrieve all DICOM headers from a local file.
+ *
+ * @param request - The incoming request object.
+ * @returns A JSON response containing the DICOM headers or an error message if the file is not present.
+ */
 export async function GET(request: Request) {
   // Read the file from the filesystem
   const fileResponse = await readLocalFile(TEST_FILENAME_DCM);

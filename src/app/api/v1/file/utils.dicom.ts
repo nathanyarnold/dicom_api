@@ -90,7 +90,12 @@ export async function extractDicomHeaderByTag(
   }
 }
 
-// Function to convert a PNG to a File
+/**
+ * Converts a PNG object to a File object.
+ * @param png - The PNG object to be converted in Buffer format.
+ * @param fileName - The desired name for the output file.
+ * @returns A promise that resolves to a File object containing the PNG data.
+ */
 async function convertPNGToFile(png: PNG, fileName: string): Promise<File> {
   return new Promise((resolve, reject) => {
     const chunks: Buffer[] = [];
@@ -107,6 +112,15 @@ async function convertPNGToFile(png: PNG, fileName: string): Promise<File> {
   });
 }
 
+/**
+ * Extracts a PNG image from a DICOM file stored in a Buffer.
+ * @param fileBuffer - The DICOM file content as a Buffer.
+ * @param fileName - The desired name for the output PNG file.
+ * @returns A promise that resolves to an object containing:
+ *  - `success`: A boolean indicating whether the PNG was extracted successfully.
+ *  - `error`: An error object if the extraction failed.
+ *  - `file`: The extracted PNG file as a File object, or `undefined` if the extraction failed.
+ */
 export async function extractPngFromDicom(
   fileBuffer: Buffer,
   fileName: string

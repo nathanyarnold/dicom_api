@@ -32,12 +32,21 @@ import { readFileSync } from "fs";
 import { join } from "path";
 import { returnJSONResponse } from "@/app/api/v1/utils.api";
 
+/**
+ * Reads the package.json file and returns the version number.
+ * @returns {string} The version number from the package.json file.
+ */
 export function getPackageJSONVsNumber() {
   return JSON.parse(
     readFileSync(join(__dirname, "../../../../../package.json"), "utf-8")
   ).version;
 }
 
+/**
+ * GET request to the /api/v1/health endpoint.
+ * @param {Request} request - The incoming request object.
+ * @returns {Response} The response object containing the health check in JSON format.
+ */
 export async function GET(request: Request) {
   const responseOutput = {
     status: "ok",

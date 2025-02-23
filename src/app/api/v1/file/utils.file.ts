@@ -18,7 +18,15 @@ export const FILE_PATH = process.cwd() + "/public/assets/";
 export const TEST_FILENAME_DCM = "test-file.dcm"; // for demo purposes only
 export const TEST_FILENAME_PNG = "test-file.png"; // for demo purposes only
 
-// write files to filesystem
+/**
+ * Saves a file locally to the specified file path.
+ *
+ * @param file - The file to be saved, represented as a `File` object.
+ * @param fileName - The name to save the file as.
+ * @returns A promise that resolves to an object containing:
+ *  - `success`: A boolean indicating whether the file was saved successfully.
+ *  - `fileName`: The name of the saved file, or `undefined` if the save failed.
+ */
 export async function saveFileLocally(
   file: File,
   fileName: string
@@ -35,7 +43,14 @@ export async function saveFileLocally(
   }
 }
 
-// read a file from the filesystem
+/**
+ * Reads a file from the local file system.
+ *
+ * @param filename - The name of the file to read.
+ * @returns A promise that resolves to an object containing:
+ *  - `success`: A boolean indicating whether the file was read successfully.
+ *  - `file`: The file content as a `Buffer`, or `undefined` if the read failed.
+ */
 export async function readLocalFile(
   filename: string
 ): Promise<ReadLocalFileReturn> {

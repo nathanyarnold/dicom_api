@@ -21,8 +21,10 @@ import { Request } from "node-fetch";
 import { returnJSONResponse } from "@/app/api/v1/utils.api";
 
 /**
- * This function is the default route for the file header endpoint. It handles cases where a file header is requested, but no tag is specified.
- * @param request
+ * Handles the GET request to the default file header endpoint if no tag is supplied.
+ *
+ * @param request - The incoming request object.
+ * @returns A 400 response containing a JSON object indicating that no tag was defined.
  */
 export async function GET(request: Request) {
   // output

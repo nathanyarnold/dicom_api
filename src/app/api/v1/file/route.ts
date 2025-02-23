@@ -65,6 +65,11 @@ import { returnJSONResponse } from "../utils.api";
 import { saveFileLocally, TEST_FILENAME_DCM } from "./utils.file";
 import { validateDicomFile } from "./utils.dicom";
 
+/**
+ * POST request to the /api/v1/file endpoint.
+ * @param request - Request object.
+ * @returns A JSON response containing a success message or an error message on the file upload status.
+ */
 export async function POST(request: Request) {
   // Validate: a file needs to be send using "multipart/form-data"
   if (!request.headers.get("Content-Type")?.includes("multipart/form-data")) {

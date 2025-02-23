@@ -104,7 +104,11 @@ import {
 } from "@/app/api/v1/file/utils.file";
 import * as dicomParser from "dicom-parser";
 
-// POST /api/file/png
+/**
+ * POST request to the /api/v1/png endpoint.
+ * @param request - Request object.
+ * @returns A JSON response indicating the success or failure of the PNG file creation process, including a message and the file name.
+ */
 export async function POST(request: Request) {
   // Read the file from the filesystem
   const fileName = TEST_FILENAME_DCM;
@@ -160,7 +164,11 @@ export async function POST(request: Request) {
   });
 }
 
-// GET /api/file/png
+/**
+ * GET request to the /api/v1/png endpoint.
+ * @param request - Request object.
+ * @returns a JSON response indicating the success or failure of the PNG file retrieval process, including a message and the file name.
+ */
 export async function GET(request: Request) {
   // Read the file from the filesystem
   const fileResponse = (await readLocalFile(

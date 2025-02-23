@@ -44,6 +44,13 @@ import {
   DicomHeaderValue,
 } from "@/app/api/v1/file/utils.dicom";
 
+/**
+ * Handles the GET request to retrieve a DICOM header value by tag.
+ *
+ * @param request - The incoming request object.
+ * @param params - The incoming request parameters.
+ * @returns A JSON response containing the DICOM header value or an error message if the tag does not correspond to an existing header.
+ */
 export async function GET(
   request: Request,
   { params }: { params: { tag: string } }
