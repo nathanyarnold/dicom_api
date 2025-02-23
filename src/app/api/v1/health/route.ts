@@ -1,6 +1,6 @@
 /**
  * @swagger
- * /api/health:
+ * /api/v1/health:
  *   get:
  *     summary: Health check endpoint
  *     description: Returns the API's health status, version, uptime, and timestamp.

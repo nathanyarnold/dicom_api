@@ -1,6 +1,6 @@
 /**
  * @swagger
- * /api/file/png:
+ * /api/v1/file/png:
  *   post:
  *     summary: Create a PNG file from a DICOM file
  *     description: Reads a DICOM file from the filesystem, converts it to a PNG file, and saves it.
@@ -36,19 +36,19 @@
  *                   type: string
  *             examples:
  *               Example1:
- *                 summary:
+ *                 summary: No file is present
  *                 value:
  *                   success: false
  *                   message: "No file is present"
  *                   fileName: "{fileName}"
  *               Example2:
- *                 summary:
+ *                 summary: File is not a DICOM
  *                 value:
  *                   success: false
  *                   message:  "File is not a DICOM"
  *                   fileName: "{fileName}"
  *               Example3:
- *                 summary:
+ *                 summary: Unknown error
  *                 value:
  *                   success: false
  *                   message: There was an unknown error extracting a PNG from the DICOM file
@@ -81,7 +81,7 @@
  *                   message: "File is not a PNG"
  *                   fileName: "{fileName}"
  *               Example2:
- *                 summary: Requested file is not present (either DICOM file hasn't been uploaded, or it hasn't been converted to a PNG yet)
+ *                 summary: Requested file is not present
  *                 value:
  *                   success: false
  *                   message:  "No file is present"

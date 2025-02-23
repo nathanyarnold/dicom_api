@@ -1,16 +1,16 @@
 /**
  * @swagger
- * /file/header/{tag}:
+ * /api/v1/file/header/{tag}:
  *   get:
  *     summary: Retrieve a DICOM header value by tag
- *     description: Fetches a specific DICOM header value from a local file based on the provided tag.
+ *     description: Fetches the value of a specific DICOM header identified by the provided tag from a local DICOM file.
  *     parameters:
  *       - in: path
  *         name: tag
  *         required: true
+ *         description: The tag of the DICOM header to retrieve. eg "x00080080" (include leading x)
  *         schema:
  *           type: string
- *         description: The DICOM tag to retrieve the header value for.
  *     responses:
  *       200:
  *         description: Successfully retrieved the DICOM header value.
@@ -21,24 +21,12 @@
  *               properties:
  *                 tag:
  *                   type: string
- *                   description: The DICOM tag.
+ *                   description: The tag of the DICOM header.
  *                 value:
- *                   type: object
- *                   nullable: true
+ *                   type: string
  *                   description: The value of the DICOM header.
- *             examples:
- *               Example1:
- *                 summary: Value exists ("Standard patient name")
- *                 value:
- *                   tag: "x00100010"
- *                   value: "Nathan Arnold"
- *               Example2:
- *                 summary: Missing value ("Scan Options" tag exists but is empty)
- *                 value:
- *                   tag: "x00180022"
- *                   value: null
  *       400:
- *         description: Bad request. Either the tag or the file is not present.
+ *         description: Bad request. The tag supplied does not correspond to an existing header. Note that if no header is supplied, the endpoint /api/v1/file/header fill fire instead.
  *         content:
  *           application/json:
  *             schema:
@@ -46,18 +34,8 @@
  *               properties:
  *                 message:
  *                   type: string
- *                   description: Error message.
- *             examples:
- *               FileNotPresent:
- *                 summary: File is not present
- *                 value:
- *                   message: "No file is present"
- *               TagNotPresent:
- *                 summary: Tag is not present
- *                 value:
- *                   message: "No header found for tag: {tag}"
+ *                   description: Error message describing the issue.
  */
-
 import { Request } from "node-fetch";
 import { returnJSONResponse } from "@/app/api/v1/utils.api";
 import { readLocalFile, TEST_FILENAME_DCM } from "@/app/api/v1/file/utils.file";

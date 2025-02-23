@@ -1,6 +1,6 @@
 /**
  * @swagger
- * /api/ping:
+ * /api/v1/ping:
  *   get:
  *     summary: Health check endpoint
  *     description: Returns a status message to indicate the API is running.

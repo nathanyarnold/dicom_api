@@ -1,9 +1,9 @@
 /**
  * @swagger
- * /file/header:
+ * /api/v1/file/header:
  *   get:
  *     summary: Default route for the file header endpoint
- *     description: Handles cases where a file header is requested, but no tag is specified.
+ *     description: Handles cases where a file header is requested, but no tag is specified (which is invalid). There is no successful 200 for this endpoint, only a 400, as a tag should always be specified.
  *     responses:
  *       400:
  *         description: No Tag Defined

@@ -1,6 +1,6 @@
 /**
  * @swagger
- * /file/headers:
+ * /api/v1/file/headers:
  *   get:
  *     summary: Retrievei all DICOM headers from a local file
  *     description: Reads a local DICOM file and extracts all DICOM headers.
@@ -41,7 +41,6 @@ export async function GET(request: Request) {
 
   // Extract DICOM tags
   const dicomTags = extractAllDicomHeaders(fileResponse.file);
-  console.log(dicomTags);
 
   // output
   return returnJSONResponse(dicomTags);

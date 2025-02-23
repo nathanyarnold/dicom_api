@@ -1,27 +1,25 @@
 /**
  * @swagger
- * /file:
+ * /api/v1/file:
  *   post:
  *     summary: Upload a DICOM file
- *     description: Validates and saves a DICOM file sent using multipart/form-data.
- *     consumes:
- *       - multipart/form-data
- *     parameters:
- *       - in: header
- *         name: Content-Type
- *         required: true
- *         schema:
- *           type: string
- *           example: multipart/form-data
- *         description: The content type must be multipart/form-data.
- *       - in: formData
- *         name: file
- *         required: true
- *         type: file
- *         description: The DICOM file to upload.
+ *     description: Validates and saves a DICOM file sent using "multipart/form-data".
+ *     tags:
+ *       - File
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               file:
+ *                 type: string
+ *                 format: binary
+ *                 description: The DICOM file to upload.
  *     responses:
  *       200:
- *         description: File received and saved
+ *         description: File received and saved successfully.
  *         content:
  *           application/json:
  *             schema:
@@ -32,9 +30,9 @@
  *                   example: File received and saved
  *                 fileName:
  *                   type: string
- *                   example: test.dcm
+ *                   example: TEST_FILENAME_DCM
  *       400:
- *         description: Invalid request
+ *         description: Invalid request.
  *         content:
  *           application/json:
  *             schema:
@@ -43,8 +41,17 @@
  *                 message:
  *                   type: string
  *                   example: Invalid Content-Type, must be multipart/form-data
+ *             examples:
+ *               Example1:
+ *                 summary: File is required
+ *                 value:
+ *                   message: File is required
+ *               Example2:
+ *                 summary: Invalid file format
+ *                 value:
+ *                   message: Invalid file format, must be in DICOM format
  *       500:
- *         description: System error saving file
+ *         description: System error saving file.
  *         content:
  *           application/json:
  *             schema:
@@ -54,8 +61,6 @@
  *                   type: string
  *                   example: System error saving file
  */
-
-import { Request } from "node-fetch";
 import { returnJSONResponse } from "../utils.api";
 import { saveFileLocally, TEST_FILENAME_DCM } from "./utils.file";
 import { validateDicomFile } from "./utils.dicom";

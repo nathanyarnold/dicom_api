@@ -7,6 +7,12 @@ const swaggerDefinition: SwaggerDefinition = {
     version: "1.0.0",
     description: "API documentation for my Next.js app",
   },
+  servers: [
+    {
+      url: "http://localhost:3000", // Adjust this based on your actual API path
+      description: "Local development server",
+    },
+  ],
 };
 
 const options: Options = {
