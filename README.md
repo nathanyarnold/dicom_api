@@ -14,6 +14,10 @@ Swagger is running at the [web-app root](http://localhost:3000), for your conven
 
 To help with development and integration testing, I used a Postman collection. For your convenience, it is available in `public/docs/PocketHealth API.postman_collection.json`
 
+## Unit Tests
+
+The test didn't explicitly ask for unit-test, but I do believe they are good practice. I didn't want to get bogged-down in writing a ton for a test like this thought. Instead, I added jest, and mocked up two tests: one for the util I use to output JSON responses, and the other for the simple PING GET endpoint. I did this to demonstrate _how_ I would do it for this application.
+
 ## Running the Application: "Get Started"
 
 First, download the application:
